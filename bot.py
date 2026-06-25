@@ -27,13 +27,16 @@ from telegram.error import TelegramError
 from db import Database
 
 # =============================================
-# HEALTH CHECK SERVER - Must start before bot
+# HEALTH CHECK - Handles GET + HEAD requests
 # =============================================
 class HealthHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
         self.end_headers()
         self.wfile.write(b"OK")
+    def do_HEAD(self):
+        self.send_response(200)
+        self.end_headers()
     def log_message(self, format, *args):
         pass
 
@@ -43,7 +46,6 @@ def start_health_server():
     Thread(target=server.serve_forever, daemon=True).start()
     print(f"Health check running on port {port}")
 
-# Start health check IMMEDIATELY
 start_health_server()
 
 # =============================================
